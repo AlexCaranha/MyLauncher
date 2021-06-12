@@ -2,7 +2,6 @@ from kivy.lang import Builder
 
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 
 from kivymd.app import MDApp
@@ -11,7 +10,9 @@ KV = '''
 <ContentNavigationDrawer>:
 
     ScrollView:
+
         MDList:
+
             OneLineListItem:
                 text: "Screen 1"
                 on_press:
@@ -26,6 +27,7 @@ KV = '''
 
 
 Screen:
+
     MDToolbar:
         id: toolbar
         pos_hint: {"top": 1}
@@ -61,15 +63,16 @@ Screen:
                 nav_drawer: nav_drawer
 '''
 
+
 class ContentNavigationDrawer(BoxLayout):
-    screen_manager = ScreenManager()
+    screen_manager = ObjectProperty()
     nav_drawer = ObjectProperty()
 
 
-class MyLauncher(MDApp):
+class TestNavigationDrawer(MDApp):
     def build(self):
-        # Window.borderless = True
+        Window.borderless = True
         return Builder.load_string(KV)
 
 
-MyLauncher().run()
+TestNavigationDrawer().run()
