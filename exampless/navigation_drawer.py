@@ -10,9 +10,7 @@ KV = '''
 <ContentNavigationDrawer>:
 
     ScrollView:
-
         MDList:
-
             OneLineListItem:
                 text: "Screen 1"
                 on_press:

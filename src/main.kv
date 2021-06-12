@@ -1,3 +1,4 @@
+
 <ContentNavigationDrawer>:
     ScrollView:
         MDList:
@@ -13,18 +14,19 @@
                     root.nav_drawer.set_state("close")
                     root.screen_manager.current = "scr 2"
 
-
 Screen:
+    pos_hint: {'center_x': .5, 'center_y': .5}
+
     MDToolbar:
         id: toolbar
         pos_hint: {"top": 1}
         elevation: 10
         title: "MyLauncher"
         left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
-        # right_action_items: [["dots-vertical", lambda x: app.change_title_visibility()]]
+
         MDSwitch:
             pos_hint: {'center_x': .5, 'center_y': .5}
-            on_active: app.change_title_visibility(self.active)
+            on_active: app.change_title_visibility(self.active)            
 
     MDNavigationLayout:
         x: toolbar.height
