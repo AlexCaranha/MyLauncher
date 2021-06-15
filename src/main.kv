@@ -1,56 +1,44 @@
-
-<ContentNavigationDrawer123>:
+<ContentNavigationDrawer>:
     ScrollView:
-        MDList:
-            OneLineListItem:
-                text: "Screen 1"
-                on_press:
-                    root.nav_drawer.set_state("close")
-                    root.screen_manager.current = "scr 1"
-
-            OneLineListItem:
-                text: "Screen 2"
-                on_press:
-                    root.nav_drawer.set_state("close")
-                    root.screen_manager.current = "scr 2"
+        id: scroll_view
 
 Screen:
-    pos_hint: {'center_x': .5, 'center_y': .5}
+    name: "main_screen"
 
     MDToolbar:
         id: toolbar
         pos_hint: {"top": 1}
         elevation: 10
-        title: "MyLauncher"
+        title: "MDNavigationDrawer"
         left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
-
         MDSwitch:
             pos_hint: {'center_x': .5, 'center_y': .5}
             on_active: app.change_title_visibility(self.active)            
 
     MDNavigationLayout:
+        id: navigation_layout
         x: toolbar.height
 
         ScreenManager:
-            id: screen_manager
+            id: screen_manager            
 
             Screen:
                 name: "scr 1"
 
                 MDLabel:
-                    text: "Screen 1"
+                    text: "Search"
                     halign: "center"
 
             Screen:
                 name: "scr 2"
 
                 MDLabel:
-                    text: "Screen 2"
+                    text: "Configuration"
                     halign: "center"
 
         MDNavigationDrawer:
             id: nav_drawer
 
-            ContentNavigationDrawer123:
+            ContentNavigationDrawer:
                 screen_manager: screen_manager
                 nav_drawer: nav_drawer
