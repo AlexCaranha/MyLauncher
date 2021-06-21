@@ -77,5 +77,3 @@ class Main(MDApp):
         print("\non_stop:")
 
 Main().run()
-
-# Criar função para encontrar componente recursivamente pelo id ou nome.
