@@ -6,9 +6,12 @@ from kivy.uix.screenmanager import ScreenManager
 
 from kivy.properties import ObjectProperty
 from kivymd.app import MDApp
-from view_util import add_list_items_in_scroll, get_component_by_id
-from kivymd.uix.list import OneLineListItem
 
+from view_util import add_list_items_in_scroll, get_component_by_id
+
+from kivymd.uix.list import OneLineListItem
+from pages.configuration import Configuration
+from pages.search import Search
 
 class ContentNavigationDrawer(BoxLayout):
     screen_manager = ScreenManager()
@@ -28,20 +31,34 @@ class Main(MDApp):
         self.setup()
 
     def setup(self):
+        self.setup_screens()
         self.setup_left_scroll()
+
+    def setup_screens(self):
+        screen_manager = get_component_by_id("screen_manager", self.root)
+
+        screen = Configuration()
+        screen.build()
+        screen_manager.add_widget(screen)
+
+        screen = Search()
+        screen.build()
+        screen_manager.add_widget(screen)
+
+        screen_manager.current = "SearchPage"
 
     def setup_left_scroll(self):
         scroll = get_component_by_id("scroll_view", self.root)
         widgets = list()
 
-        item1 = OneLineListItem(text="Search", on_press=self.on_press_scroll)
-        item1.name="item1"
-        widgets.append(item1)
+        item = OneLineListItem(text="Search", on_press=self.on_press_scroll)
+        item.name="itemSearch"
+        widgets.append(item)
 
-        item2 = OneLineListItem(text="Configuration", on_press=self.on_press_scroll)
-        item2.name="item2"
+        item = OneLineListItem(text="Configuration", on_press=self.on_press_scroll)
+        item.name="itemConfiguration"
 
-        widgets.append(item2)
+        widgets.append(item)
         add_list_items_in_scroll(widgets, scroll)
 
     def on_press_scroll(self, sender):
@@ -50,17 +67,14 @@ class Main(MDApp):
 
         screen_manager = get_component_by_id("screen_manager", self.root)
 
-        if sender.name == "item1":
-            screen_manager.current = "scr 1"
+        if sender.name == "itemSearch":
+            screen_manager.current = "SearchPage"
 
-        if sender.name == "item2":
-            screen_manager.current = "scr 2"
+        if sender.name == "itemConfiguration":
+            screen_manager.current = "ConfigurationPage"
 
     def on_stop(self):
         print("\non_stop:")
-
-    def on_search_validate(self):
-        print("key pressed.")
 
 Main().run()
 

@@ -9,7 +9,7 @@ Screen:
         id: toolbar
         pos_hint: {"top": 1}
         elevation: 10
-        title: "MDNavigationDrawer"
+        title: "MyLauncher"
         left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
         MDSwitch:
             pos_hint: {'center_x': .5, 'center_y': .5}
@@ -20,21 +20,7 @@ Screen:
         x: toolbar.height
 
         ScreenManager:
-            id: screen_manager            
-
-            Screen:
-                name: "scr 1"
-
-                MDLabel:
-                    text: "Search"
-                    halign: "center"
-
-            Screen:
-                name: "scr 2"
-
-                MDLabel:
-                    text: "Configuration"
-                    halign: "center"
+            id: screen_manager
 
         MDNavigationDrawer:
             id: nav_drawer
