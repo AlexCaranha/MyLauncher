@@ -10,6 +10,8 @@ from kivymd.app import MDApp
 from view_util import add_list_items_in_scroll, get_component_by_id
 
 from kivymd.uix.list import OneLineListItem
+
+from pages.about import About
 from pages.configuration import Configuration
 from pages.search import Search
 
@@ -45,6 +47,10 @@ class Main(MDApp):
         screen.build()
         screen_manager.add_widget(screen)
 
+        screen = About()
+        screen.build()
+        screen_manager.add_widget(screen)
+
         screen_manager.current = "SearchPage"
 
     def setup_left_scroll(self):
@@ -57,8 +63,12 @@ class Main(MDApp):
 
         item = OneLineListItem(text="Configuration", on_press=self.on_press_scroll)
         item.name="itemConfiguration"
-
         widgets.append(item)
+
+        item = OneLineListItem(text="About", on_press=self.on_press_scroll)
+        item.name="itemAbout"
+        widgets.append(item)
+        
         add_list_items_in_scroll(widgets, scroll)
 
     def on_press_scroll(self, sender):
@@ -72,6 +82,9 @@ class Main(MDApp):
 
         if sender.name == "itemConfiguration":
             screen_manager.current = "ConfigurationPage"
+
+        if sender.name == "itemAbout":
+            screen_manager.current = "AboutPage"
 
     def on_stop(self):
         print("\non_stop:")

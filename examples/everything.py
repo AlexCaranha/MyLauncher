@@ -1,6 +1,7 @@
 import ctypes
 import datetime
 import struct
+import os
 
 #defines
 EVERYTHING_REQUEST_FILE_NAME = 0x00000001
@@ -27,41 +28,70 @@ everything_dll.Everything_GetResultSize.argtypes = [ctypes.c_int,ctypes.POINTER(
 everything_dll.Everything_GetResultFileNameW.argtypes = [ctypes.c_int]
 everything_dll.Everything_GetResultFileNameW.restype = ctypes.c_wchar_p
 
-#setup search
-everything_dll.Everything_SetSearchW("Beth.exe")
-everything_dll.Everything_SetRequestFlags(EVERYTHING_REQUEST_FILE_NAME | EVERYTHING_REQUEST_PATH | EVERYTHING_REQUEST_SIZE | EVERYTHING_REQUEST_DATE_MODIFIED)
+def get_file_extension(file_path:str):
+    if os.path.isfile(file_path) == False:
+        return None
 
-#execute the query
-everything_dll.Everything_QueryW(1)
+    file_name, file_extension = os.path.splitext(file_path)
+    return file_extension
 
-#get the number of results
-num_results = everything_dll.Everything_GetNumResults()
+def search(word:str, extension:str):
+    #setup search
+    everything_dll.Everything_SetSearchW(word)
+    everything_dll.Everything_SetRequestFlags(EVERYTHING_REQUEST_FILE_NAME | EVERYTHING_REQUEST_PATH | EVERYTHING_REQUEST_SIZE | EVERYTHING_REQUEST_DATE_MODIFIED)
 
-#show the number of results
-print("Result Count: {}".format(num_results))
+    #execute the query
+    everything_dll.Everything_QueryW(1)
 
-#convert a windows FILETIME to a python datetime
-#https://stackoverflow.com/questions/39481221/convert-datetime-back-to-windows-64-bit-filetime
-WINDOWS_TICKS = int(1/10**-7)  # 10,000,000 (100 nanoseconds or .1 microseconds)
-WINDOWS_EPOCH = datetime.datetime.strptime('1601-01-01 00:00:00',
-                                           '%Y-%m-%d %H:%M:%S')
-POSIX_EPOCH = datetime.datetime.strptime('1970-01-01 00:00:00',
-                                         '%Y-%m-%d %H:%M:%S')
-EPOCH_DIFF = (POSIX_EPOCH - WINDOWS_EPOCH).total_seconds()  # 11644473600.0
-WINDOWS_TICKS_TO_POSIX_EPOCH = EPOCH_DIFF * WINDOWS_TICKS  # 116444736000000000.0
+    #get the number of results
+    num_results = everything_dll.Everything_GetNumResults()
 
-def get_time(filetime):
-    """Convert windows filetime winticks to python datetime.datetime."""
-    winticks = struct.unpack('<Q', filetime)[0]
-    microsecs = (winticks - WINDOWS_TICKS_TO_POSIX_EPOCH) / WINDOWS_TICKS
-    return datetime.datetime.fromtimestamp(microsecs)
+    #show the number of results
+    # print("Result Count: {}".format(num_results))
 
-#create buffers
-filename = ctypes.create_unicode_buffer(260)
-date_modified_filetime = ctypes.c_ulonglong(1)
+    #convert a windows FILETIME to a python datetime
+    #https://stackoverflow.com/questions/39481221/convert-datetime-back-to-windows-64-bit-filetime
+    WINDOWS_TICKS = int(1/10**-7)  # 10,000,000 (100 nanoseconds or .1 microseconds)
+    WINDOWS_EPOCH = datetime.datetime.strptime('1601-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
 
-#show results
-for i in range(num_results):
-	everything_dll.Everything_GetResultFullPathNameW(i, filename,260)
-	everything_dll.Everything_GetResultDateModified(i, date_modified_filetime)
-	print("Filename: {}\nDate Modified: {}\n".format(ctypes.wstring_at(filename), get_time(date_modified_filetime)))
+    POSIX_EPOCH = datetime.datetime.strptime('1970-01-01 00:00:00', '%Y-%m-%d %H:%M:%S')
+
+    EPOCH_DIFF = (POSIX_EPOCH - WINDOWS_EPOCH).total_seconds()  # 11644473600.0
+    WINDOWS_TICKS_TO_POSIX_EPOCH = EPOCH_DIFF * WINDOWS_TICKS  # 116444736000000000.0
+
+    def get_time(filetime):
+        """Convert windows filetime winticks to python datetime.datetime."""
+        winticks = struct.unpack('<Q', filetime)[0]
+        microsecs = (winticks - WINDOWS_TICKS_TO_POSIX_EPOCH) / WINDOWS_TICKS
+        return datetime.datetime.fromtimestamp(microsecs)
+
+    #create buffers
+    filename = ctypes.create_unicode_buffer(260)
+    date_modified_filetime = ctypes.c_ulonglong(1)
+
+    output = list()
+
+    #show results
+    for i in range(num_results):
+        everything_dll.Everything_GetResultFullPathNameW(i, filename, 260)
+        everything_dll.Everything_GetResultDateModified(i, date_modified_filetime)
+        modified_on = get_time(date_modified_filetime)
+
+        file_path = filename.value
+        file_name = ctypes.wstring_at(filename)
+        file_extension = get_file_extension(file_path)
+
+        if file_extension == extension:
+            output.append((file_name, modified_on))            
+
+    return output
+
+
+def print_results(word:str, results:list):
+
+    print(f"Results for {word}: {len(results)}")
+    for filename, modified_on in results:
+        print(f"\tFilename: {filename}\n\tDate Modified: {modified_on}\n")
+
+results = search("firefox.exe", ".exe")
+print_results("firefox.exe", results)

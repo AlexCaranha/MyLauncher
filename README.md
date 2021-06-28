@@ -32,7 +32,7 @@ python main.py
 ## Roadmap
 
 - Add plugin support.
-- Add more integrations
+- Add integration with Everything.
 - Add alarm clock.
 
 ## Authors
