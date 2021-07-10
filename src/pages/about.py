@@ -3,7 +3,7 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 from kivymd.uix.label import MDLabel
 
-class About(Screen):
+class AboutScreen(Screen):
     def build(self):
         self.name = "AboutPage"
 

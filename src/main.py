@@ -11,21 +11,22 @@ from view_util import add_list_items_in_scroll, get_component_by_id
 
 from kivymd.uix.list import OneLineListItem
 
-from pages.about import About
-from pages.configuration import Configuration
-from pages.search import Search
+from pages.about import AboutScreen
+from pages.configuration import ConfigurationScreen
+from pages.search import SearchScreen
+from pages.exit import ExitScreen
+from pages.plugins import PluginsScreen
 
 class ContentNavigationDrawer(BoxLayout):
     screen_manager = ScreenManager()
     nav_drawer = ObjectProperty()
-
 
 class Main(MDApp):
     def change_title_visibility(self, enabled):
         Window.borderless = not enabled
 
     def build(self):
-        self.theme_cls.theme_style = "Light"
+        self.theme_cls.theme_style = "Dark"
         self.change_title_visibility(False)
 
     def on_start(self):
@@ -39,17 +40,11 @@ class Main(MDApp):
     def setup_screens(self):
         screen_manager = get_component_by_id("screen_manager", self.root)
 
-        screen = Configuration()
-        screen.build()
-        screen_manager.add_widget(screen)
+        screens = [ConfigurationScreen(), SearchScreen(), AboutScreen(), PluginsScreen(), ExitScreen()]
 
-        screen = Search()
-        screen.build()
-        screen_manager.add_widget(screen)
-
-        screen = About()
-        screen.build()
-        screen_manager.add_widget(screen)
+        for screen in screens:
+            screen.build()
+            screen_manager.add_widget(screen)
 
         screen_manager.current = "SearchPage"
 
@@ -57,17 +52,12 @@ class Main(MDApp):
         scroll = get_component_by_id("scroll_view", self.root)
         widgets = list()
 
-        item = OneLineListItem(text="Search", on_press=self.on_press_scroll)
-        item.name="itemSearch"
-        widgets.append(item)
+        dictionary = self.get_dictionary_pages()
 
-        item = OneLineListItem(text="Configuration", on_press=self.on_press_scroll)
-        item.name="itemConfiguration"
-        widgets.append(item)
-
-        item = OneLineListItem(text="About", on_press=self.on_press_scroll)
-        item.name="itemAbout"
-        widgets.append(item)
+        for key, value in dictionary.items():            
+            item = OneLineListItem(text=value[0], on_press=self.on_press_scroll)
+            item.name=key
+            widgets.append(item)
         
         add_list_items_in_scroll(widgets, scroll)
 
@@ -76,17 +66,22 @@ class Main(MDApp):
         nav_drawer.set_state("close")
 
         screen_manager = get_component_by_id("screen_manager", self.root)
+        dictionary = self.get_dictionary_pages()
 
-        if sender.name == "itemSearch":
-            screen_manager.current = "SearchPage"
-
-        if sender.name == "itemConfiguration":
-            screen_manager.current = "ConfigurationPage"
-
-        if sender.name == "itemAbout":
-            screen_manager.current = "AboutPage"
+        if sender.name in dictionary:
+            screen_manager.current = dictionary[sender.name][1]
 
     def on_stop(self):
         print("\non_stop:")
+
+    def get_dictionary_pages(self):
+        dictionary = {
+            "itemSearch": ("Search", "SearchPage"),
+            "itemConfiguration": ("Configuration", "ConfigurationPage"),
+            "itemPlugins": ("Plugins", "PluginsPage"),
+            "itemAbout": ("About", "AboutPage"),
+            "itemExit": ("Exit", "ExitPage"),
+        }
+        return dictionary
 
 Main().run()

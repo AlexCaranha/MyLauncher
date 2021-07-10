@@ -4,7 +4,7 @@ from kivy.uix.screenmanager import Screen
 from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextField
 
-class Search(Screen):
+class SearchScreen(Screen):
     def build(self):
         self.name = "SearchPage"
 
