@@ -26,7 +26,7 @@ class Main(MDApp):
         Window.borderless = not enabled
 
     def build(self):
-        self.theme_cls.theme_style = "Dark"
+        # self.theme_cls.theme_style = "Dark"
         self.change_title_visibility(False)
 
     def on_start(self):

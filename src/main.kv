@@ -5,26 +5,28 @@
 Screen:
     name: "main_screen"
 
-    MDToolbar:
-        id: toolbar
-        pos_hint: {"top": 1}
-        elevation: 10
-        title: "MyLauncher"
-        left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
-        MDSwitch:
-            pos_hint: {'center_x': .5, 'center_y': .5}
-            on_active: app.change_title_visibility(self.active)            
+    MDBoxLayout:
+        orientation: 'vertical'
 
-    MDNavigationLayout:
-        id: navigation_layout
-        x: toolbar.height
+        MDToolbar:
+            id: toolbar
+            pos_hint: {"top": 1}
+            elevation: 10
+            title: "MyLauncher"
+            left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
+            MDSwitch:
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_active: app.change_title_visibility(self.active)            
 
-        ScreenManager:
-            id: screen_manager
+        MDNavigationLayout:
+            id: navigation_layout
 
-        MDNavigationDrawer:
-            id: nav_drawer
+            ScreenManager:
+                id: screen_manager
 
-            ContentNavigationDrawer:
-                screen_manager: screen_manager
-                nav_drawer: nav_drawer
+            MDNavigationDrawer:
+                id: nav_drawer
+
+                ContentNavigationDrawer:
+                    screen_manager: screen_manager
+                    nav_drawer: nav_drawer
