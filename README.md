@@ -34,6 +34,8 @@ python main.py
 - Add plugin support.
 - Add integration with Everything.
 - Add alarm clock.
+- Add **markdown**/rst rendering.
+- 
 
 ## Authors
 

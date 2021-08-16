@@ -35,7 +35,7 @@ def get_file_extension(file_path:str):
     file_name, file_extension = os.path.splitext(file_path)
     return file_extension
 
-def search(word:str, extension:str):
+def search(word:str, extension:str, qtd_results):
     #setup search
     everything_dll.Everything_SetSearchW(word)
     everything_dll.Everything_SetRequestFlags(EVERYTHING_REQUEST_FILE_NAME | EVERYTHING_REQUEST_PATH | EVERYTHING_REQUEST_SIZE | EVERYTHING_REQUEST_DATE_MODIFIED)
@@ -45,6 +45,9 @@ def search(word:str, extension:str):
 
     #get the number of results
     num_results = everything_dll.Everything_GetNumResults()
+
+    if num_results > qtd_results:
+        num_results = qtd_results
 
     #show the number of results
     # print("Result Count: {}".format(num_results))
@@ -74,15 +77,17 @@ def search(word:str, extension:str):
     #show results
     for i in range(num_results):
         everything_dll.Everything_GetResultFullPathNameW(i, filename, 260)
-        everything_dll.Everything_GetResultDateModified(i, date_modified_filetime)
-        modified_on = get_time(date_modified_filetime)
 
         file_path = filename.value
         file_name = ctypes.wstring_at(filename)
         file_extension = get_file_extension(file_path)
 
+        if extension == None:
+            output.append(file_name)
+            continue
+
         if file_extension == extension:
-            output.append((file_name, modified_on))            
+            output.append(file_name)
 
     return output
 
