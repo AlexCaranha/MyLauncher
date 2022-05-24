@@ -10,10 +10,10 @@ Mylauncher is a software to help you to do your tasks quickly.
 https://www.python.org/downloads/release/python-377/
 
 2. Create the virtual environment:
-python -m virtualenv venv_mylauncher
+python -m virtualenv venv
 
 3. Activate the virtual environment:
-venv_mylauncher\Scripts\activate
+venv\Scripts\activate
 
 4. Install the packages:
 pip install -r requirements.txt

@@ -1,5 +1,5 @@
 import pyautogui
-import os
+import subprocess, os, platform
 
 def get_monitor_size():
     width, height = pyautogui.size()
@@ -16,7 +16,12 @@ def get_file_extension(file_path:str):
     return file_extension
 
 def open_file(file_path:str):
-    os.startfile(file_path)
+    if platform.system() == 'Darwin':       # macOS
+        subprocess.call(('open', file_path))
+    elif platform.system() == 'Windows':    # Windows
+        os.startfile(file_path)
+    else:                                   # linux variants
+        subprocess.call(('xdg-open', file_path))
 
 def get_file_name(file_path:str):
     return os.path.basename(file_path)
