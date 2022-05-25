@@ -12,6 +12,7 @@ from kivy.utils import get_color_from_hex, hex_colormap
 
 from kivy.uix.scrollview import ScrollView
 from util import open_file, get_file_name
+from util import is_not_blank
 
 class SearchScreen(Screen):
     def build(self):
@@ -25,7 +26,7 @@ class SearchScreen(Screen):
         self.setup_variables()
 
         self.set_selected_item(None)
-        self.search_sentence("start")        
+        self.search_sentence(None)
 
         self.add_widget(self.layout)
 
@@ -106,7 +107,7 @@ class SearchScreen(Screen):
         self.set_background_color(self.item_selected, self.selected_color)
 
     def set_background_color(self, item, color):
-        if item == None:
+        if item == None or color == None:
             return
 
         item.bg_color = color
@@ -121,6 +122,7 @@ class SearchScreen(Screen):
         if keycode[1] == "enter":
             self.selected_color = self.get_color(self.txtSearch.text)
             self.refresh_items_colors()
+            self.search_sentence(self.txtSearch.text)
             pass
 
         if keycode[1] == "backspace":
@@ -145,42 +147,14 @@ class SearchScreen(Screen):
         for result in results:
             primary_text = result[0]
             segundary_text = result[1]
+
+            if is_not_blank(sentence) and (sentence in primary_text or sentence in segundary_text):
+                continue
+
             item = TwoLineListItem(text=primary_text, secondary_text=segundary_text, on_press=self.on_press_result)
             item.bg_color = self.unselected_color
 
             self.results.add_widget(item)
-
-
-    # def search_sentence(self, sentence):
-    #     results = search(sentence, None, 50)
-
-    #     self.results.clear_widgets()
-        
-    #     for file_path in results:
-    #         file_name = get_file_name(file_path)
-    #         item = TwoLineListItem(text=file_name, secondary_text=file_path, on_press=self.on_press_result)                        
-    #         self.results.add_widget(item)
-
-    # def what_component_has_focus(self):
-    #     item = self.txtSearch.focus_next
-    #     print(item)
-
-    # def set_select_index(self, index):
-    #     self.selected = index
-
-    # def set_select_item(self, index):
-    #     self.select_index = index
-
-    #     for item in self.results.children:
-    #         item.bg_color = (0, 0, 0, 0)
-
-    #     qtd = len(self.results.children)
-
-    #     if 0 <= index < qtd:
-    #         item = self.results.children[qtd-1-index]
-    #         item.bg_color = (75/255, 152/255, 196/255, 1)
-    #         self.scroll.update_from_scroll
-
 
     def on_press_result(self, sender):
         open_file(sender.text)
