@@ -134,27 +134,32 @@ class SearchScreen(Screen):
         if keycode[1] == "down":
             self.set_selected_item(-1)
 
-        print(f"keycode = {keycode}")
+        # print(f"keycode = {keycode}")
 
     def search_sentence(self, sentence):
         self.results.clear_widgets()
         
-        results = [
+        lista = [
             ("Vinci", "Scripts para aumentar a produtividade"),
             ("Alpha Tools", "Scripts para facilitar a obtenção de cadastros."),
             ("Util", "Scrips utilitários.")]
 
-        for result in results:
-            primary_text = result[0]
-            segundary_text = result[1]
+        for item_result in lista:
+            primary_text = item_result[0]
+            segundary_text = item_result[1]
 
-            if is_not_blank(sentence) and (sentence in primary_text or sentence in segundary_text):
+            if is_not_blank(sentence) and not (sentence in primary_text or sentence in segundary_text):
                 continue
 
             item = TwoLineListItem(text=primary_text, secondary_text=segundary_text, on_press=self.on_press_result)
             item.bg_color = self.unselected_color
+            item.on_release = self.focus_on_txtSearch
 
             self.results.add_widget(item)
 
     def on_press_result(self, sender):
-        open_file(sender.text)
+        # open_file(sender.text)
+        print(f"{sender.text} clicked.")
+
+    def focus_on_txtSearch(self):
+        self.txtSearch.focus = True

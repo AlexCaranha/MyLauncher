@@ -20,7 +20,7 @@ def open_file(file_path:str):
         subprocess.call(('open', file_path))
 
     elif platform.system() == 'Windows':    # Windows
-        os.startfile(file_path)
+        subprocess.call(('open', file_path))
         
     else:                                   # linux variants
         subprocess.call(('xdg-open', file_path))
