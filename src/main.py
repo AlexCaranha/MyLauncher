@@ -19,12 +19,35 @@ from pages.plugins import PluginsScreen
 
 from plugins.manager import Manager
 from datetime import datetime
+from global_hotkeys import *
+import time
+from kivy.clock import Clock
+
+def hide():
+    print("hide process: .")
+    Clock.schedule_once(lambda *a: Window.minimize(), 0)
+
+def show():
+    print("show.")
+    Clock.schedule_once(lambda *a: Window.restore(), 0)
+
+bindings = [
+    [["control", "shift", "7"], None, hide],
+    [["control", "shift", "8"], None, show],
+]
+
+# Register all of our keybindings
+register_hotkeys(bindings)
+
+# Finally, start listening for keypresses
+start_checking_hotkeys()
 
 print("Instanciando Plugin Manager.")
 manager = Manager()
 
 print("Carregando plugins.")
 manager.load_plugins()
+
 
 class ContentNavigationDrawer(BoxLayout):
     screen_manager = ScreenManager()
@@ -54,6 +77,14 @@ class Main(MDApp):
     #     print('keyup:')
     #     print('\tkey:',key)
     #     print('\tscancode:', scancode)
+
+    def on_pause(self):
+        print(f'on_pause')
+        pass
+
+    def on_resume(self):
+        print(f'on_resume')
+        pass
 
 
     def _on_keyboard_down(self, *args):
@@ -120,3 +151,8 @@ class Main(MDApp):
 
 if __name__ == "__main__":
     Main().run()
+    # Keep waiting until the user presses the exit_application keybinding.
+
+    # Note that the hotkey listener will exit when the main thread does.
+    # while is_alive:
+    #     time.sleep(0.1)
