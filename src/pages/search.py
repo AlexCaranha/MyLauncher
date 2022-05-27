@@ -150,9 +150,8 @@ class SearchScreen(Screen):
         self.results.clear_widgets()
         
         lista = [
-            ("Vinci", "Scripts para aumentar a produtividade"),
-            ("Alpha Tools", "Scripts para facilitar a obtenção de cadastros."),
-            ("Util", "Scrips utilitários.")]
+            ("vinci (vnc)", "Scripts para aumentar a produtividade"),
+            ("snippets (snip)", "Scrips utilitários.")]
 
         for item_result in lista:
             primary_text = item_result[0]
