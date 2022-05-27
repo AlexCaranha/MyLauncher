@@ -9,7 +9,7 @@ def get_class():
 class EverythingPlugin:
     @hookimpl
     def setup(self):
-        print("Setup ...")
+        print(f"plugin {self.get_alias()} - setup ...")
 
     @hookimpl
     def get_alias(self):

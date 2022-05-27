@@ -13,7 +13,6 @@ PyGetWindow==0.0.9
 Pygments==2.9.0
 PyMsgBox==1.0.9
 pyperclip==1.8.2
-pypiwin32==223
 PyRect==0.1.4
 PyScreeze==0.1.27
 PyTweening==1.0.3

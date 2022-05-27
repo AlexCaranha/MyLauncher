@@ -11,8 +11,7 @@ from kivymd.uix.list import TwoLineListItem
 from kivy.utils import get_color_from_hex, hex_colormap
 
 from kivy.uix.scrollview import ScrollView
-from util import open_file, get_file_name
-from util import is_not_blank
+from util import open_file, get_file_name, is_not_blank
 
 class SearchScreen(Screen):
     def build(self):
@@ -71,13 +70,18 @@ class SearchScreen(Screen):
     def get_selected_item(self):
         return (self.item_selected_index, self.item_selected)            
 
-    def set_selected_item(self, variation):
-        if variation == None:
-            self.item_selected_old = None
-            self.item_selected_index_old = -1
+    def set_selected_item(self, item):
+        index_selected, item_selected = self.get_result_by_item(item)
+        self.item_selected_index = index_selected
+        self.item_selected = item_selected
 
+    def set_selected_item_by_variation(self, variation):
+        if variation == None:
             self.item_selected = None
             self.item_selected_index = -1
+            self.refresh_items_colors()
+
+            print(f"index selected: {self.item_selected_index}.")
             return
 
         new_index = self.item_selected_index + variation
@@ -89,21 +93,20 @@ class SearchScreen(Screen):
         if new_index >= qtd_results:
             new_index = 0
 
-        # indexes
-        self.item_selected_old = self.item_selected
-        self.item_selected_index_old = self.item_selected_index
-        
+        # indexes               
         self.item_selected_index = new_index
-        self.item_selected = self.get_result(new_index)
+        self.item_selected = self.get_result_by_index(new_index)
 
         # colors
         self.refresh_items_colors()
 
-        print(f"index selected: {self.item_selected_index}")
+        print(f"index selected: {self.item_selected_index}.")
 
 
     def refresh_items_colors(self):
-        self.set_background_color(self.item_selected_old, self.unselected_color)
+        for item in self.results.children:
+            self.set_background_color(item, self.unselected_color)  
+
         self.set_background_color(self.item_selected, self.selected_color)
 
     def set_background_color(self, item, color):
@@ -115,12 +118,19 @@ class SearchScreen(Screen):
     def get_qtd(self, lista:MDList):
         return 0 if lista == None else len(lista.children)
 
-    def get_result(self, index:int):
+    def get_result_by_index(self, index:int):
         return self.results.children[index]
+
+    def get_result_by_item(self, item_selected):
+        for index, item in enumerate(self.results.children):
+            if item == item_selected:
+                return (index, item)
+
+        return (-1, None)
 
     def keyboard_on_key_down_wrapper(self, window, keycode, text, modifiers):
         if keycode[1] == "enter":
-            self.selected_color = self.get_color(self.txtSearch.text)
+            self.set_selected_item_by_variation(None)
             self.refresh_items_colors()
             self.search_sentence(self.txtSearch.text)
             pass
@@ -129,10 +139,10 @@ class SearchScreen(Screen):
             self.txtSearch.text = self.txtSearch.text[:-1] if len(self.txtSearch.text) > 0 else self.txtSearch.text
 
         if keycode[1] == "up":
-            self.set_selected_item(+1)
+            self.set_selected_item_by_variation(+1)
 
         if keycode[1] == "down":
-            self.set_selected_item(-1)
+            self.set_selected_item_by_variation(-1)
 
         # print(f"keycode = {keycode}")
 
@@ -156,10 +166,15 @@ class SearchScreen(Screen):
             item.on_release = self.focus_on_txtSearch
 
             self.results.add_widget(item)
+        
+        self.txtSearch.focus = True
 
     def on_press_result(self, sender):
-        # open_file(sender.text)
+        self.set_selected_item(sender)
+        self.refresh_items_colors()
+
         print(f"{sender.text} clicked.")
+        self.txtSearch.focus = True
 
     def focus_on_txtSearch(self):
         self.txtSearch.focus = True

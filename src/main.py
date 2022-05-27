@@ -18,8 +18,6 @@ from pages.exit import ExitScreen
 from pages.plugins import PluginsScreen
 
 from plugins.manager import Manager
-from hotkey import HotKeyBehavior
-
 from datetime import datetime
 
 print("Instanciando Plugin Manager.")
@@ -33,39 +31,17 @@ class ContentNavigationDrawer(BoxLayout):
     nav_drawer = ObjectProperty()
 
 
-class Main(HotKeyBehavior, MDApp):
-    def __init__(self, **kwargs):
-        super(Main, self).__init__(**kwargs)
-        # self.key_exit = "ctrl+c"
-        self.key_show="ctrl+shift+space"
-        self.on_parent(self, Window)
-        # self.build()
+class Main(MDApp):
+    # def build(self):
+        # self.icon = #"src/assets/rocket.png"
 
-    def change_title_visibility(self, enabled):
-        Window.borderless = not enabled
-        print("change_title_visibility ...")
-
-    def build(self):
-        # self.root = Builder.load_file("main.kv")
-        self.icon = "assets\\rocket.png"
         # self.theme_cls.theme_style = "Dark"
-        self.change_title_visibility(False)
         # Window.bind(on_key_down=self._keydown)
         # Window.bind(on_key_up=self._keyup)
 
         # Window.bind(on_key_down=self._on_keyboard_down)
         # Window.bind(on_key_up=self._on_keyboard_up)
         # self.on_start()
-
-    def on_press(self):
-        pass
-
-    def on_show(self):
-        self.now_show = datetime.now()
-
-    def on_hide(self):
-        self.now_hide = datetime.now()
-    
 
     # def _keydown(self, window, key, scancode, codepoint, modifiers):
     #     print('keydown:')
@@ -78,6 +54,7 @@ class Main(HotKeyBehavior, MDApp):
     #     print('keyup:')
     #     print('\tkey:',key)
     #     print('\tscancode:', scancode)
+
 
     def _on_keyboard_down(self, *args):
         print(f'down: {args}')
@@ -143,6 +120,3 @@ class Main(HotKeyBehavior, MDApp):
 
 if __name__ == "__main__":
     Main().run()
-    # runTouchApp(Main())
-
-# Main().run()

@@ -6,7 +6,7 @@ Screen:
     name: "main_screen"
 
     MDBoxLayout:
-        orientation: 'vertical'
+        orientation: 'vertical'        
 
         MDToolbar:
             id: toolbar
@@ -14,9 +14,8 @@ Screen:
             elevation: 10
             title: "MyLauncher"
             left_action_items: [["menu", lambda x: nav_drawer.set_state("open")]]
-            MDSwitch:
-                pos_hint: {'center_x': .5, 'center_y': .5}
-                on_active: app.change_title_visibility(self.active)            
+            # MDSwitch:
+            #     pos_hint: {'center_x': .5, 'center_y': .5}
 
         MDNavigationLayout:
             id: navigation_layout

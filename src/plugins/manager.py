@@ -28,8 +28,7 @@ class Manager():
             for entry in dirs + files: 
                 if entry.endswith('main.py'):
                     filepath = root+'.main'
-                    filepath = filepath.replace("plugins\\", "plugins.")
-                    filename = os.path.basename(filepath)
+                    filename = "plugins." + os.path.basename(filepath)
                     output.append(filename)
 
         return output
