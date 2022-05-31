@@ -1,8 +1,4 @@
-# from turtle import Screen
-from kivy.base import runTouchApp
 
-from kivy.lang import Builder
-from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager
 from kivy.properties import ObjectProperty
@@ -17,37 +13,18 @@ from pages.search import SearchScreen
 from pages.exit import ExitScreen
 from pages.plugins import PluginsScreen
 
+from kivy.core.window import Window
 from plugins.manager import Manager
-from datetime import datetime
-from global_hotkeys import *
-import time
-from kivy.clock import Clock
+from mainBll import keyboard_listener, window_locate
 
-def hide():
-    print("hide process: .")
-    Clock.schedule_once(lambda *a: Window.minimize(), 0)
-
-def show():
-    print("show.")
-    Clock.schedule_once(lambda *a: Window.restore(), 0)
-
-bindings = [
-    [["control", "shift", "7"], None, hide],
-    [["control", "shift", "8"], None, show],
-]
-
-# Register all of our keybindings
-register_hotkeys(bindings)
-
-# Finally, start listening for keypresses
-start_checking_hotkeys()
+keyboard_listener()
+window_locate()
 
 print("Instanciando Plugin Manager.")
 manager = Manager()
 
 print("Carregando plugins.")
 manager.load_plugins()
-
 
 class ContentNavigationDrawer(BoxLayout):
     screen_manager = ScreenManager()
@@ -60,6 +37,7 @@ class Main(MDApp):
 
         # self.theme_cls.theme_style = "Dark"
         # Window.bind(on_key_down=self._keydown)
+
         # Window.bind(on_key_up=self._keyup)
 
         # Window.bind(on_key_down=self._on_keyboard_down)
@@ -151,8 +129,3 @@ class Main(MDApp):
 
 if __name__ == "__main__":
     Main().run()
-    # Keep waiting until the user presses the exit_application keybinding.
-
-    # Note that the hotkey listener will exit when the main thread does.
-    # while is_alive:
-    #     time.sleep(0.1)

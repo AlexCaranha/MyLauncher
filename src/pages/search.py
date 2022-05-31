@@ -54,11 +54,14 @@ class SearchScreen(Screen):
         self.txtSearch.mode = "rectangle"
         self.txtSearch.focus = True
         self.txtSearch.multiline = False
-        self.txtSearch.keyboard_on_key_down = self.keyboard_on_key_down_wrapper
-        # self.txtSearch.on_text_validate = self.on_search_validate
+        # self.txtSearch.keyboard_on_key_down = self.keyboard_on_key_down_wrapper
+        # self.txtSearch.on_text_validate = self.on_enter
         
         self.layout_bar.add_widget(self.txtSearch)
         main_layout.add_widget(self.layout_bar)
+
+    def on_enter(instance, value):
+        print(f"User pressed enter in {instance}: {value}")
 
     def setup_results(self, main_layout):
         self.scroll = ScrollView()
@@ -128,21 +131,21 @@ class SearchScreen(Screen):
 
         return (-1, None)
 
-    def keyboard_on_key_down_wrapper(self, window, keycode, text, modifiers):
-        if keycode[1] == "enter":
-            self.set_selected_item_by_variation(None)
-            self.refresh_items_colors()
-            self.search_sentence(self.txtSearch.text)
-            pass
+    # def keyboard_on_key_down_wrapper(self, window, keycode, text, modifiers):
+    #     if keycode[1] == "enter":
+    #         self.set_selected_item_by_variation(None)
+    #         self.refresh_items_colors()
+    #         self.search_sentence(self.txtSearch.text)
+    #         pass
 
-        if keycode[1] == "backspace":
-            self.txtSearch.text = self.txtSearch.text[:-1] if len(self.txtSearch.text) > 0 else self.txtSearch.text
+    #     if keycode[1] == "backspace":
+    #         self.txtSearch.text = self.txtSearch.text[:-1] if len(self.txtSearch.text) > 0 else self.txtSearch.text
 
-        if keycode[1] == "up":
-            self.set_selected_item_by_variation(+1)
+    #     if keycode[1] == "up":
+    #         self.set_selected_item_by_variation(+1)
 
-        if keycode[1] == "down":
-            self.set_selected_item_by_variation(-1)
+    #     if keycode[1] == "down":
+    #         self.set_selected_item_by_variation(-1)
 
         # print(f"keycode = {keycode}")
 

@@ -21,6 +21,11 @@ pip install -r requirements.txt
 5. Run a file:
 python main.py
 
+---
+
+Para atualizar a lista de dependências (requirements.txt):
+pip freeze > requirements.txt
+
 ## Features
 
 - Search installed softwares and local files.

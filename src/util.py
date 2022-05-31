@@ -1,14 +1,18 @@
 import pyautogui
 import subprocess, os, platform
 
+import mss
+
 def get_monitor_size():
-    width, height = pyautogui.size()
-    return (width, height)
+    sct = mss.mss()
+    primary_monitor = sct.monitors[1]
+
+    return (primary_monitor['width'], primary_monitor['height'])
 
 def get_percentage_of_monitor_size(
     percentage_width, percentage_height):
 
-    width, height = pyautogui.size()
+    width, height = get_monitor_size()
     return (width * percentage_width, height * percentage_height)
 
 def get_file_extension(file_path:str):
