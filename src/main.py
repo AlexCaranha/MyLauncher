@@ -37,7 +37,6 @@ class Main(MDApp):
 
         # self.theme_cls.theme_style = "Dark"
         # Window.bind(on_key_down=self._keydown)
-
         # Window.bind(on_key_up=self._keyup)
 
         # Window.bind(on_key_down=self._on_keyboard_down)
@@ -55,15 +54,6 @@ class Main(MDApp):
     #     print('keyup:')
     #     print('\tkey:',key)
     #     print('\tscancode:', scancode)
-
-    def on_pause(self):
-        print(f'on_pause')
-        pass
-
-    def on_resume(self):
-        print(f'on_resume')
-        pass
-
 
     def _on_keyboard_down(self, *args):
         print(f'down: {args}')
