@@ -41,3 +41,6 @@ def is_not_blank (myString):
 # def on_search_key_up(self, window, keycode):
 #     if keycode is not None and len(keycode) == 2 and keycode[1] == "tab":
 #         self.scroll.focus = True
+
+# PyUserInput==0.1.11
+# screeninfo==0.8

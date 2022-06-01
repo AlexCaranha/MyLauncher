@@ -19,13 +19,14 @@ def show_hide_window():
     else:
         Clock.schedule_once(lambda *a: Window.show(), 0)
 
-    print("done.")
+    # print("done.")
 
 def on_press(key):
     if hasattr(key, 'name'):
         keys_pressed.append(key.name)
+        # print("key pressed: " + key.name)
 
-    if 'space' in keys_pressed and 'ctrl' in keys_pressed and 'alt' in keys_pressed:            
+    if 'space' in keys_pressed and ('ctrl' in keys_pressed or 'ctrl_l' in keys_pressed) and ('alt' in keys_pressed or 'alt_l' in keys_pressed):
         show_hide_window()    
 
 def on_release(key):

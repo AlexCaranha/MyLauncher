@@ -4,16 +4,16 @@ import pluggy
 hookimpl = pluggy.HookimplMarker('mylauncher')
 
 def get_class():
-    return VinciPlugin()
+    return SnippetsPlugin()
 
-class VinciPlugin:
+class SnippetsPlugin:
     @hookimpl
     def setup(self):
-        print(f"plugin {self.get_alias()} - setup ...")
+        print("Setup ...")
 
     @hookimpl
     def get_alias(self):
-        return "vinci"
+        return "snippets"
 
     @hookimpl
     def execute(self, input:str):

@@ -36,11 +36,9 @@ pip freeze > requirements.txt
   
 ## Roadmap
 
+- Add hotkey configuration.
 - Add plugin support.
-- Add integration with Everything.
-- Add alarm clock.
 - Add **markdown**/rst rendering.
-- 
 
 ## Authors
 

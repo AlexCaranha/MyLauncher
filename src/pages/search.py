@@ -60,8 +60,8 @@ class SearchScreen(Screen):
         self.layout_bar.add_widget(self.txtSearch)
         main_layout.add_widget(self.layout_bar)
 
-    def on_enter(instance, value):
-        print(f"User pressed enter in {instance}: {value}")
+    # def on_enter(instance, value):
+    #     print(f"User pressed enter in {instance}: {value}")
 
     def setup_results(self, main_layout):
         self.scroll = ScrollView()

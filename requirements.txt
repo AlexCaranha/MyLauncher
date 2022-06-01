@@ -31,3 +31,5 @@ typing-extensions==3.10.0.0
 urllib3==1.26.5
 watchdog==2.1.2
 zipp==3.4.1
+mss==6.1.0
+PyUserInput==0.1.11
